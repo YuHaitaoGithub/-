@@ -493,10 +493,8 @@ struct Buffer KeyGet(int line,_In_z_ const char * _Filename, _In_z_ const char *
 				if (buf[i] == ' ')continue;
 				else
 				{
-			
-						key.buffer[times] = buf[i];
-						times++;
-					
+					key.buffer[times] = buf[i];
+					times++;
 				}
 			}
 			for (int j = c + 1; j < len; j++)//�洢ֵ
@@ -517,6 +515,7 @@ struct Buffer KeyGet(int line,_In_z_ const char * _Filename, _In_z_ const char *
 		{
 			fgets(buf, LINE, fp);
 			len = strlen(buf);
+			times++;
 		}
 	}
 	return key;
