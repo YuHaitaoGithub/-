@@ -283,7 +283,7 @@ fclose(fp);//关闭输入文件
 //
 //}
 
-int Semicolon_juage(int grade, int len, char *buf)
+int semicolon_juage(int grade, int len, char *buf)
 {
 	for (grade; grade < len; grade++)
 	{
@@ -298,7 +298,7 @@ int bracket_juage(int num, int len, char *buf)
 	if (buf[num] == '[')
 	{
 		int key = num + 1;
-		int tag = Semicolon_juage(key, len, buf);
+		int tag = semicolon_juage(key, len, buf);
 		int rtn_value = 0;
 		int rtn_value1 = 0;
 		int rtn_value2 = 0;
@@ -367,6 +367,49 @@ int bracket_juage(int num, int len, char *buf)
 	else return 0;
 }
 
+int Equal_sign(int len, char *buf)
+{
+	for (int i = 0; i < len; i++)
+	{
+		if (buf[i] == '=')return i;
+	}
+	return 0;
+}
+
+int key_juage(int len, char *buf)
+{
+	int tag = Equal_sign(len, buf);
+	int fucy = semicolon_juage(0, len, buf);
+	if (tag)
+	{
+		if ((tag > fucy)&&(fucy))return 0;
+		else
+		{
+			int i = tag - 1;
+			int j = tag + 1;
+			while (i >= 0)
+			{
+				if (buf[i] == ' ')
+				{
+					i--;
+				}
+				else
+				{
+					while (j != len)
+					{
+						if (buf[j] == ' ')j--;
+						else return 1;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	else if (fucy)return 1;
+	else return 0;
+}
+
+
 struct Buffer SectionGet(_In_z_ const char * _Filename, _In_z_ const char * _Mode)
 {
 	int line = 0;
@@ -418,17 +461,84 @@ struct Buffer SectionGet(_In_z_ const char * _Filename, _In_z_ const char * _Mod
 	return section;
 }
 
+struct Buffer KeyGet(int line,_In_z_ const char * _Filename, _In_z_ const char * _Mode)
+{
+	Buffer key = { { 0 },{0}, {0} };
+	FILE *fp;
+	int tag = 0;
+	int len = 0;
+	int times = 0;
+	int l = 0;
+	fp = fopen(_Filename, _Mode);
+	char buf[LINE] = { '0' };
+	if (NULL == fp)
+	{
+		printf("no files found\n");
+		return key;
+	}
+	while (line >= 0)
+	{
+		fgets(buf, LINE, fp);
+		len = strlen(buf);
+		line--;
+	}
+	while (!(feof(fp))&&(buf[0] != '['))
+	{
+		int k = key_juage(len, buf);
+		int c = Equal_sign(len, buf);
+		if (k)
+		{
+			for (int i = 0; i <= c; i++) //输入键
+			{
+				if (buf[i] == ' ')continue;
+				else
+				{
+			
+						key.buffer[times] = buf[i];
+						times++;
+					
+				}
+			}
+			for (int j = c + 1; j < len; j++)//存储值
+			{
+				if (buf[j] = ' ')continue;
+				else
+				{
+					key.buffer[times] = buf[j];
+					times++;
+				}
+			}
+			key.Line[l] = c;
+			l++;
+			fgets(buf, LINE, fp);
+			len = strlen(buf);
+		}
+		else
+		{
+			fgets(buf, LINE, fp);
+			len = strlen(buf);
+		}
+	}
+	return key;
+}
+
 int main()
 {
 	_In_z_ const char * Filename = "..\\..\\..\\int.ini";
 	_In_z_ const char * Mode_r = "r";
 	_In_z_ const char * Mode_w = "w";
 	struct Buffer display = SectionGet(Filename, Mode_r);
-	printf("%s%d\n%", display.buffer, display.Rtn_value);
+	struct Buffer diy_key = KeyGet(display.Line[0], Filename, Mode_r);
+	//int a = atoi(p+4);
+	printf("%s%d\n", display.buffer, display.Rtn_value);
 	for (int i = 0; display.Line[i] != 0; i++)
 	{
 		printf("%d ", display.Line[i]);
 	}
+
+	printf("\n%s", diy_key.buffer);
+	
+	printf("%d ", diy_key.Line[0]);
 	return 0;
 }
 
