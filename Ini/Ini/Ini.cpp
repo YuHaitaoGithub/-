@@ -4,7 +4,7 @@
 #include <string.h>
 #define LINE 1024
 #define MAX_LINE 2048
-struct Buffer{ int Rtn_value; char buffer[MAX_LINE]; };
+struct Buffer{ int Rtn_value; char buffer[MAX_LINE]; int Line[LINE]; };
 
 //int SectionGet(int len,char *buf)
 //{
@@ -369,8 +369,10 @@ int bracket_juage(int num, int len, char *buf)
 
 struct Buffer SectionGet(_In_z_ const char * _Filename, _In_z_ const char * _Mode)
 {
+	int line = 0;
+	int l = 0;
 	int times = 0;
-	Buffer section = { 0, { 0 } };
+	Buffer section = { 0, { 0 }, { 0 } };
 	FILE *fp;
 	int tag = 0;
 	fp = fopen(_Filename, _Mode);
@@ -382,6 +384,7 @@ struct Buffer SectionGet(_In_z_ const char * _Filename, _In_z_ const char * _Mod
 	}
 	fgets(buf, LINE, fp);
 	int len = strlen(buf);
+	line = 1;
 	do
 	{
 		tag = bracket_juage(0, len, buf);
@@ -398,12 +401,16 @@ struct Buffer SectionGet(_In_z_ const char * _Filename, _In_z_ const char * _Mod
 				else continue;
 			}
 			section.Rtn_value++;
+			section.Line[l] = line;
+			l++;
 			fgets(buf, LINE, fp);
+			line++;
 			len = strlen(buf);
 		}
 		else
 		{
 			fgets(buf, LINE, fp);
+			line++;
 			len = strlen(buf);
 		}
 	} while (!feof(fp));
@@ -413,11 +420,15 @@ struct Buffer SectionGet(_In_z_ const char * _Filename, _In_z_ const char * _Mod
 
 int main()
 {
-	_In_z_ const char * Filename = "..\\..\\int.ini";
+	_In_z_ const char * Filename = "..\\..\\..\\int.ini";
 	_In_z_ const char * Mode_r = "r";
 	_In_z_ const char * Mode_w = "w";
 	struct Buffer display = SectionGet(Filename, Mode_r);
-	printf("%s%d\n", display.buffer, display.Rtn_value);
+	printf("%s%d\n%", display.buffer, display.Rtn_value);
+	for (int i = 0; display.Line[i] != 0; i++)
+	{
+		printf("%d ", display.Line[i]);
+	}
 	return 0;
 }
 
