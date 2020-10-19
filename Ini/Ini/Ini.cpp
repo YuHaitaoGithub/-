@@ -264,7 +264,7 @@ int main()
 	 const char * Mode_r = "r";
 	const char * Mode_w = "w";
 	struct Buffer display = SectionGet(Filename, Mode_r);
-	struct Buffer diy_key = KeyGet(display.Line[0], Filename, Mode_r);
+	struct Buffer diy_key = KeyGet(display.Line[1], Filename, Mode_r);
 	//int a = atoi(p+4);
 	printf("%s%d\n", display.buffer, display.Rtn_value);
 	for (int i = 0; display.Line[i] != 0; i++)
@@ -277,6 +277,7 @@ int main()
 	{
 		printf("第%d个 第%d行\n", diy_key.Line[j], diy_key.Line[++j]);
 	}
+	system("pause");
 	return 0;
 
 }
