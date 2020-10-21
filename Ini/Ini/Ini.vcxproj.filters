@@ -18,6 +18,18 @@
     <ClCompile Include="Ini.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="juage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Equal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SectionGet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyGet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ini.h">

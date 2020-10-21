@@ -78,7 +78,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Equal.cpp" />
     <ClCompile Include="Ini.cpp" />
+    <ClCompile Include="juage.cpp" />
+    <ClCompile Include="KeyGet.cpp" />
+    <ClCompile Include="SectionGet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ini.h" />
